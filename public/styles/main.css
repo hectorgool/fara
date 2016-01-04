@@ -1,3 +1,15 @@
+body { 
+    padding-top: 70px; 
+}
+
+.facebook { background: #3B5998; }
+.google { background: #D14836; }
+.twitter { background: #00ACED; }
+.yahoo { background: #731A8B; }
+.xing { background: #006567; }
+.vk { background: #567ca4; }
+
+/*
 body {
     padding-top: 50px;
 }
@@ -92,3 +104,4 @@ a {
 .btn-lg {
     font-size: 18px;
 }
+*/

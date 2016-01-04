@@ -1,0 +1,7 @@
+
+
+play.api.UnexpectedException: Unexpected exception[SQLTimeoutException: Timeout after 1000ms of waiting for a connection.]
+
+=> configuracion de slick
+
+http://stackoverflow.com/questions/33737889/play-slick-sqltimeoutexception-timeout-after-1001ms-of-waiting-for-a-connectio
