@@ -93,4 +93,51 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     // run actions and return user afterwards
     db.run(actions).map(_ => user)
   }
+
+  def findAll = {
+
+    /*
+    val query = sql"""
+      select
+        "userID", "firstName", "lastName", "email"
+      from
+        "user"
+    """.as[(String,String,String,String)]
+
+    db.run(query).map { resultOption =>
+      resultOption.map {
+        case (user) =>
+          User(
+            UUID.fromString(user.userID),
+            user.firstName,
+            user.lastName,
+            user.email
+          )
+      }
+    }
+    */
+
+    val query = for {
+      dbUser <- slickUsers.sortBy(_.fullName.desc.nullsFirst)
+      dbUserLoginInfo <- slickUserLoginInfos.filter(_.userID === dbUser.id)
+      dbLoginInfo <- slickLoginInfos.filter(_.id === dbUserLoginInfo.loginInfoId)
+    } yield (dbUser, dbLoginInfo)
+    
+    db.run(query.result).map { resultOption =>
+      resultOption.map {
+        case (user, loginInfo) =>
+          User(
+            UUID.fromString(user.userID),
+            LoginInfo(loginInfo.providerID, loginInfo.providerKey),
+            user.firstName,
+            user.lastName,
+            user.fullName,
+            user.email,
+            user.avatarURL)
+      }
+    }
+
+  }
+
+
 }

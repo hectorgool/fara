@@ -5,3 +5,31 @@ play.api.UnexpectedException: Unexpected exception[SQLTimeoutException: Timeout 
 => configuracion de slick
 
 http://stackoverflow.com/questions/33737889/play-slick-sqltimeoutexception-timeout-after-1001ms-of-waiting-for-a-connectio
+
+
+
+
+
+@(emailForm: Form[String])(implicit request: RequestHeader, messages: Messages)
+@import b3.vertical.fieldConstructor
+@main("Forgot Password") {
+    @*
+    @tags.alertFromRequest(request, "error")
+    *@
+    @b3.form(controllers.routes.ApplicationController.handleForgotPassword) {
+        <fieldset>
+            <legend>@Messages("forgot.title")</legend>
+            @b3.text( 
+                emailForm("email"), 
+                '_hiddenLabel -> Messages("field.email"), 
+                'placeholder -> "your@email.com", 
+                'autofocus -> true 
+            )
+            @b3.submit('class -> "btn btn-primary btn-block"){ @Messages("submit") }
+        </fieldset>
+    }
+
+    @*
+    @views.html.tags.signInHelper()
+    *@
+}

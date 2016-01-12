@@ -7,9 +7,13 @@ import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import forms._
 import models.User
+import models.daos.UserDAOImpl
 import play.api.i18n.MessagesApi
-
 import scala.concurrent.Future
+
+import play.api.mvc._
+
+import play.api.libs.json._
 
 /**
  * The basic application controller.
@@ -23,6 +27,7 @@ class ApplicationController @Inject() (
   val env: Environment[User, CookieAuthenticator],
   socialProviderRegistry: SocialProviderRegistry)
   extends Silhouette[User, CookieAuthenticator] {
+
 
   /**
    * Handles the index action.
@@ -68,4 +73,57 @@ class ApplicationController @Inject() (
 
     env.authenticatorService.discard(request.authenticator, result)
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // FORGOT PASSWORD
+  /**
+   * Starts the reset password mechanism if the user has forgot his password. It shows a form to insert his email address.
+   */
+  /*
+  def forgotPassword = UserAwareAction.async { implicit request =>
+    Future.successful(request.identity match {
+      case Some(_) => 
+        Redirect(routes.ApplicationController.index)
+      case None => 
+        Ok(views.html.forgotPassword(ForgotPasswordForm.emailForm))
+    })
+  }
+  */
+
+  /**
+   * Sends an email to the user with a link to reset the password
+   */
+  /*
+  def handleForgotPassword = Action.async { implicit request =>
+    ForgotPasswordForm.emailForm.bindFromRequest.fold(
+      formWithErrors => 
+        Future.successful(BadRequest(views.html.forgotPassword(formWithErrors))),
+      email => 
+        env.identityService.retrieve(email).flatMap {
+          case Some(_) => {
+            val token = MailTokenUser(email, isSignUp = false)
+            env.tokenService.create(token).map { _ =>
+              Mailer.forgotPassword(email, link = routes.Auth.resetPassword(token.id).absoluteURL())
+              Ok(views.html.forgotPasswordSent(email))
+            }
+          }
+          case None => 
+            Future.successful(BadRequest(viewsAuth.forgotPassword(ForgotPasswordForm.emailForm.withError("email", Messages("auth.user.notexists")))))
+        }
+    )
+  }  
+  */
+
+  //beta
+  /*
+  def users = Action.async{
+    UserDAOImpl.findAll.map{s =>
+      Ok(
+        JsArray(s.map(t =>Json.obj("firstname" -> t._3, "lastname" -> t._4)))
+      )
+    }
+  }
+  */
+
+
 }
