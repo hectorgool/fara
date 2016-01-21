@@ -15,6 +15,8 @@ import play.api.mvc._
 
 import play.api.libs.json._
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 /**
  * The basic application controller.
  *
@@ -112,17 +114,6 @@ class ApplicationController @Inject() (
         }
     )
   }  
-  */
-
-  //beta
-  /*
-  def users = Action.async{
-    UserDAOImpl.findAll.map{s =>
-      Ok(
-        JsArray(s.map(t =>Json.obj("firstname" -> t._3, "lastname" -> t._4)))
-      )
-    }
-  }
   */
 
 
